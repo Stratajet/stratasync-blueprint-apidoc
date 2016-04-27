@@ -4,6 +4,12 @@ HOST: http://polls.apiblueprint.org/
 # StrataSync
 
 StrataSync is a simple API allowing operator to upload their schedule to Stratafleet.
+Please contact the integration team if you have any questions:
+
+Email: integrations@stratajet.com
+
+Tel: +44 203 397 3904
+
 
 ## Events [/events]
 This is the RESTful way to update the schedule. Create and update single events using the following actions.
@@ -243,7 +249,10 @@ You can use this action to delete an event by passing the attribute `"deleted": 
     + Body
 
             {
-               "errors": ["Data source unique can't be blank"]
+                "errors": 
+                [
+                    {details: "Data source unique can't be blank"}
+                ]
             }
 
 ## Schedule - bulk actions [/schedules]
@@ -317,10 +326,13 @@ This is typically best suited to situations when the events of the schedule do n
     + Body
 
             {
-              "errors": [
-                {"details" : "Aircraft can't be blank", "meta": {"index": 34}}, 
-                {"details" : "To airfield is not a valid ICAO code", "meta": {"index": 450}}
-              ]
+              "errors":
+                [
+                    {
+                        "details" : "To airfield is not a valid ICAO code",
+                        "meta": {"index": 450}
+                    }
+                ]
             }
 
 
@@ -394,8 +406,11 @@ Use this action to update multiple events. Events that have been deleted from th
     + Body
 
             {
-                "errors": [
-                  {"details" : "Aircraft can't be blank", "meta": {"data_source_unique_id": "880e8400-e29b-41d4-a716-4466554415678"}}, 
-                  {"details" : "To airfield is not a valid ICAO code", "meta": {"data_source_unique_id": "990e8400-e29b-41d4-a716-4466554415678"}}
+                "errors": 
+                [
+                    {
+                        "details" : "Aircraft can't be blank",
+                        "meta": {"index": 42}
+                    }
                 ]
               }
