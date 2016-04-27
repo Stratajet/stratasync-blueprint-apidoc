@@ -145,7 +145,7 @@ object containing the details and eventually your own identifier (must be unique
             }
 
 
-### Update an event [PATCH]
+### Update an event [PATCH /events/:id]
 
 You may partially update a single event using this action. It takes a JSON object containing the attributes to update and returns the updated resource as in a single `GET` request. 
 You can use this action to delete an event by passing the attribute `"deleted": true`.
@@ -318,8 +318,8 @@ This is typically best suited to situations when the events of the schedule do n
 
             {
               "errors": [
-                {"details" : "Aircraft can't be blank", "meta": {"data_source_unique_id": "880e8400-e29b-41d4-a716-4466554415678"}}, 
-                {"details" : "To airfield is not a valid ICAO code", "meta": {"data_source_unique_id": "990e8400-e29b-41d4-a716-4466554415678"}}
+                {"details" : "Aircraft can't be blank", "meta": {"index": 34}}, 
+                {"details" : "To airfield is not a valid ICAO code", "meta": {"index": 450}}
               ]
             }
 
