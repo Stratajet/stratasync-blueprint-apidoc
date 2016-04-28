@@ -301,7 +301,7 @@ You can use this action to delete an event by passing the attribute `"deleted": 
             }
 
 ## Schedule - bulk actions [/schedules]
-This is a set of convenient actions to update the schedule with bulk actions (multiple events).
+This is a set of convenient actions to update the schedule with bulk actions (multiple events). The events submitted will be processed by a background job and may not be immediately available.
 
 ### Recreate the schedule [POST]
 Use this action to replace the entire schedule or a part of the schedule defined by a date range.
@@ -316,6 +316,8 @@ This is typically best suited to situations when the events of the schedule do n
     + Body
 
             {
+                "start_date": "2016-01-01T12:00Z",
+                "end_date": "2020-01-01T00:00Z",
                 "events": [
                   {
                     "registration_mark": "X-XXXX",
@@ -357,9 +359,21 @@ This is typically best suited to situations when the events of the schedule do n
 
     + Body
 
-
 + Response 400
-    **Bad Request**. Some of the events submitted were not valid. A list of error will be returned as shown below.
+    **Bad request**. Invalid payload. ie. if the date range is not submitted or if the array of events was not provided or was empty
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+              "message": "Invalid payload. The parameters start_date and end_date are not supported on this action"
+            }
+
++ Response 422
+    **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
 
     + Headers
 
@@ -433,10 +447,23 @@ Use this action to update multiple events. Events that have been deleted from th
     **Accepted**. The request to create the schedule has been accepted for processing
 
     + Body
-
-
+    
 + Response 400
-    **Bad Request**. Some of the events submitted were not valid. A list of error will be returned as shown below.
+    **Bad request**. Invalid payload.
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+              "message": "Invalid payload. The array of events was not provided or was empty"
+            }
+
+
++ Response 422
+    **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
 
     + Body
 
