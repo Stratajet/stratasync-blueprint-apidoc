@@ -1,22 +1,27 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://synctest.stratafleet.com/api
 
 # StrataSync
 
 StrataSync is a simple API allowing operator to upload their schedule to Stratafleet.
-Please contact the integration team if you have any questions:
+
+**This API requires an API key provided by Stratajet to be consumed.**
+
+Please contact the integration team if you have any questions or if you need to be set up with an API key :
+
+Live chat on Gitter (recommended): https://gitter.im/Stratajet/StrataSync
 
 Email: integrations@stratajet.com
 
-Tel: +44 203 397 3904
+Tel: +44 203 397 4612
 
 
 ## Events [/events]
 This is the RESTful way to update the schedule. Create and update single events using the following actions.
 
 + Attributes
-    + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, optional) - The identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. *Optional*. **Must be unique**.
-    + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event.
+    + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, required) - The identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. **Must be unique**.
+    + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event. If it doesn't exist upon creation of the event, a new aircraft will be created with the registration mark provided.
     + start_time: `2016-06-01T12:00Z` (string, required) - The start time of an aircraft event, in zulu.
     + end_time: `2016-06-01T14:00Z` (string, required) - The end time of an aircraft event, in zulu.
     + start_airfield: `EGTK` (string, required) - ICAO code representing the location of the aircraft at the start of the event.
@@ -50,9 +55,7 @@ object containing the details and eventually your own identifier (must be unique
     + Body
 
             {
-            "data": {
-                "type": "events",
-                "attributes": {
+                "event": {
                     "registration_mark": "X-XXXX",
                     "start_time": "2016-06-01T12:00Z",
                     "end_time": "2016-06-01T14:00Z",
@@ -77,29 +80,29 @@ object containing the details and eventually your own identifier (must be unique
     + Body
 
             {
-             "data": {
-                  "type": "events",
-                  "id": "42",
-                  "attributes": {
-                      "registration_mark": "X-XXXX",
-                      "start_time": "2016-06-01T12:00Z",
-                      "end_time": "2016-06-01T14:00Z",
-                      "start_airfield": "EGTK",
-                      "end_airfield": "LFPB",
-                      "utilization": "PAX",
-                      "utilization_count": "2",
-                      "deleted": "false",
-                      "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
-                  }
-              }
+                "event": {
+                  "registration_mark": "X-XXXX",
+                  "start_time": "2016-06-01T12:00Z",
+                  "end_time": "2016-06-01T14:00Z",
+                  "start_airfield": "EGTK",
+                  "end_airfield": "LFPB",
+                  "utilization": "PAX",
+                  "utilization_count": "2",
+                  "deleted": "false",
+                  "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
+                }
             }
-
-
-
 
 
 + Response 401 (application/json)
     **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            {
+               "message": "unauthorized"
+            }
+
 
 
 + Request With an invalid payload (application/json)
@@ -112,9 +115,7 @@ object containing the details and eventually your own identifier (must be unique
     + Body
 
             {
-            "data": {
-                "type": "events",
-                "attributes": {
+                "event": {
                     "registration_mark": "",
                     "start_time": "2016-06-01T12:00Z",
                     "end_time": "2016-06-01",
@@ -166,9 +167,7 @@ You can use this action to delete an event by passing the attribute `"deleted": 
     + Body
 
             {
-            "data": {
-                "type": "events",
-                "attributes": {
+                "event": {
                     "start_time": "2016-06-01T13:00Z",
                     "end_time": "2016-06-01T15:00Z",
                     "start_airfield": "EGSH",
@@ -186,30 +185,36 @@ You can use this action to delete an event by passing the attribute `"deleted": 
     + Body
 
             {
-               "data": {
-                    "type": "events",
-                    "id": "42",
-                    "attributes": {
-                        "registration_mark": "X-XXXX",
-                        "start_time": "2016-06-01T13:00Z",
-                        "end_time": "2016-06-01T15:00Z",
-                        "start_airfield": "EGSH",
-                        "end_airfield": "LFPB",
-                        "utilization": "PAX",
-                        "utilization_count": "3",
-                        "deleted": "false",
-                        "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
-                    }
+               "event": {
+                    "registration_mark": "X-XXXX",
+                    "start_time": "2016-06-01T13:00Z",
+                    "end_time": "2016-06-01T15:00Z",
+                    "start_airfield": "EGSH",
+                    "end_airfield": "LFPB",
+                    "utilization": "PAX",
+                    "utilization_count": "3",
+                    "deleted": "false",
+                    "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
                 }
             }
 
 
 + Response 401 (application/json)
-  **Unauthorized**. When the token is missing or incorrect.
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            {
+               "message": "unauthorized"
+            }
+
 
 
 + Response 404 (application/json)
   **Not found**. When the event identified in the URL is doesn't exist.
+  
+      + Body
+
 
 + Request with an invalid payload (application/json)
     + Headers
@@ -220,9 +225,7 @@ You can use this action to delete an event by passing the attribute `"deleted": 
     + Body
 
             {
-            "data": {
-                "type": "events",
-                "attributes": {
+                "event": {
                     "start_airfield": "EGCC",
                     "data_source_unique_id": ""
                 }
@@ -241,10 +244,6 @@ You can use this action to delete an event by passing the attribute `"deleted": 
   - From airfield is not a valid ICAO code
   - To airfield is not a valid ICAO code
 
-
-    + Headers
-
-            Content-Type: application/json
 
     + Body
 
@@ -271,8 +270,6 @@ This is typically best suited to situations when the events of the schedule do n
     + Body
 
             {
-            "data": {
-                "type": "schedules",
                 "events": [
                   {
                     "registration_mark": "X-XXXX",
@@ -312,9 +309,8 @@ This is typically best suited to situations when the events of the schedule do n
 + Response 202 (application/json)
     **Accepted**. The request to create the schedule has been accepted for processing
 
-    + Headers
+    + Body
 
-            Content-Type: application/json
 
 + Response 400
     **Bad Request**. Some of the events submitted were not valid. A list of error will be returned as shown below.
@@ -350,10 +346,8 @@ Use this action to update multiple events. Events that have been deleted from th
     + Body
 
             {
-            "data": {
-                "type": "schedules",
-                "events": [
-                  {
+            "events": [
+                {
                     "registration_mark": "X-XXXX",
                     "start_time": "2016-06-01T13:00Z",
                     "end_time": "2016-06-01T15:00Z",
@@ -363,8 +357,8 @@ Use this action to update multiple events. Events that have been deleted from th
                     "utilization_count": "3",
                     "deleted": "false",
                     "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
-                  },
-                  {
+              },
+              {
                     "registration_mark": "X-XXXX",
                     "start_time": "2016-06-03T09:00Z",
                     "end_time": "2016-06-03T11:30Z",
@@ -374,8 +368,8 @@ Use this action to update multiple events. Events that have been deleted from th
                     "utilization_count": "0",
                     "deleted": "false",
                     "data_source_unique_id": "660e8400-e29b-41d4-a716-4466554412324"
-                  },
-                  {
+              },
+              {
                     "registration_mark": "X-XXXX",
                     "start_time": "2016-07-04T09:00Z",
                     "end_time": "2016-07-04T11:30Z",
@@ -385,23 +379,18 @@ Use this action to update multiple events. Events that have been deleted from th
                     "utilization_count": "1",
                     "deleted": "true",
                     "data_source_unique_id": "770e8400-e29b-41d4-a716-4466554415678"
-                  }
-                ]
+              }
+            ]
             } 
 
 + Response 202 (application/json)
     **Accepted**. The request to create the schedule has been accepted for processing
 
-    + Headers
+    + Body
 
-            Content-Type: application/json
 
 + Response 400
     **Bad Request**. Some of the events submitted were not valid. A list of error will be returned as shown below.
-
-    + Headers
-
-            Content-Type: application/json
 
     + Body
 
