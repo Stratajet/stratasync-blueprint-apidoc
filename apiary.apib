@@ -339,42 +339,45 @@ This is typically best suited to situations when the events of the schedule do n
     + Body
 
             {
-                "start_date": "2016-01-01T12:00Z",
-                "end_date": "2020-01-01T00:00Z",
-                "events": [
-                  {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-06-01T13:00Z",
-                    "end_time": "2016-06-01T15:00Z",
-                    "start_airfield": "EGSH",
-                    "end_airfield": "LFPB",
-                    "utilization": "PAX",
-                    "utilization_count": 3,
-                    "deleted": false
-                  },
-                  {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-06-03T09:00Z",
-                    "end_time": "2016-06-03T11:30Z",
-                    "start_airfield": "EBBR",
-                    "end_airfield": "EGTK",
-                    "utilization": "EMPTY",
-                    "utilization_count": 0,
-                    "deleted": false,
-                    "data_source_unique_id": "660e8400-e29b-41d4-a716-4466554412324"
-                  },
-                  {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-07-04T09:00Z",
-                    "end_time": "2016-07-04T11:30Z",
-                    "start_airfield": "LFPB",
-                    "end_airfield": "EBBR",
-                    "utilization": "PAX",
-                    "utilization_count": 1,
-                    "deleted": true,
-                    "data_source_unique_id": "770e8400-e29b-41d4-a716-4466554415678"
-                  }
-                ]
+                "schedule":
+                {
+                    "start_date": "2016-01-01T12:00Z",
+                    "end_date": "2020-01-01T00:00Z",
+                    "events": [
+                      {
+                        "registration_mark": "X-XXXX",
+                        "start_time": "2016-06-01T13:00Z",
+                        "end_time": "2016-06-01T15:00Z",
+                        "start_airfield": "EGSH",
+                        "end_airfield": "LFPB",
+                        "utilization": "PAX",
+                        "utilization_count": 3,
+                        "deleted": false
+                      },
+                      {
+                        "registration_mark": "X-XXXX",
+                        "start_time": "2016-06-03T09:00Z",
+                        "end_time": "2016-06-03T11:30Z",
+                        "start_airfield": "EBBR",
+                        "end_airfield": "EGTK",
+                        "utilization": "EMPTY",
+                        "utilization_count": 0,
+                        "deleted": false,
+                        "data_source_unique_id": "660e8400-e29b-41d4-a716-4466554412324"
+                      },
+                      {
+                        "registration_mark": "X-XXXX",
+                        "start_time": "2016-07-04T09:00Z",
+                        "end_time": "2016-07-04T11:30Z",
+                        "start_airfield": "LFPB",
+                        "end_airfield": "EBBR",
+                        "utilization": "PAX",
+                        "utilization_count": 1,
+                        "deleted": true,
+                        "data_source_unique_id": "770e8400-e29b-41d4-a716-4466554415678"
+                      }
+                    ]
+                }
             } 
 
 + Response 202 (application/json)
@@ -429,41 +432,45 @@ Use this action to update multiple events. Events that have been deleted from th
     + Body
 
             {
-            "events": [
+                "schedule":
                 {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-06-01T13:00Z",
-                    "end_time": "2016-06-01T15:00Z",
-                    "start_airfield": "EGSH",
-                    "end_airfield": "LFPB",
-                    "utilization": "PAX",
-                    "utilization_count": 3,
-                    "deleted": false,
-                    "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
-              },
-              {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-06-03T09:00Z",
-                    "end_time": "2016-06-03T11:30Z",
-                    "start_airfield": "EBBR",
-                    "end_airfield": "EGTK",
-                    "utilization": "EMPTY",
-                    "utilization_count": 0,
-                    "deleted": false,
-                    "data_source_unique_id": "660e8400-e29b-41d4-a716-4466554412324"
-              },
-              {
-                    "registration_mark": "X-XXXX",
-                    "start_time": "2016-07-04T09:00Z",
-                    "end_time": "2016-07-04T11:30Z",
-                    "start_airfield": "LFPB",
-                    "end_airfield": "EBBR",
-                    "utilization": "PAX",
-                    "utilization_count": 1,
-                    "deleted": true,
-                    "data_source_unique_id": "770e8400-e29b-41d4-a716-4466554415678"
-              }
-            ]
+                    "events": 
+                    [
+                        {
+                            "registration_mark": "X-XXXX",
+                            "start_time": "2016-06-01T13:00Z",
+                            "end_time": "2016-06-01T15:00Z",
+                            "start_airfield": "EGSH",
+                            "end_airfield": "LFPB",
+                            "utilization": "PAX",
+                            "utilization_count": 3,
+                            "deleted": false,
+                            "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        {
+                            "registration_mark": "X-XXXX",
+                            "start_time": "2016-06-03T09:00Z",
+                            "end_time": "2016-06-03T11:30Z",
+                            "start_airfield": "EBBR",
+                            "end_airfield": "EGTK",
+                            "utilization": "EMPTY",
+                            "utilization_count": 0,
+                            "deleted": false,
+                            "data_source_unique_id": "660e8400-e29b-41d4-a716-4466554412324"
+                        },
+                        {
+                            "registration_mark": "X-XXXX",
+                            "start_time": "2016-07-04T09:00Z",
+                            "end_time": "2016-07-04T11:30Z",
+                            "start_airfield": "LFPB",
+                            "end_airfield": "EBBR",
+                            "utilization": "PAX",
+                            "utilization_count": 1,
+                            "deleted": true,
+                            "data_source_unique_id": "770e8400-e29b-41d4-a716-4466554415678"
+                        }
+                    ]
+                }
             } 
 
 + Response 202 (application/json)
