@@ -78,7 +78,7 @@ This is the RESTful way to update the schedule. Create and update single events 
 + Attributes
     + id: `550e8400-e29b-41d4-a716-446655440000` (number) - The Stratajet internal id of the event, returned upon creation of a single event. To be used in further *RESTful* requests.
     + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, required) - The unique identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. **Must be a unique id in your scheduling software**.
-    + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event. If it doesn't exist upon creation of the event, a new aircraft will be created with the registration mark provided.
+    + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event. **If it doesn't exist upon creation of the event, a new aircraft will be created with the registration mark provided.**
     + start_time: `2016-06-01T12:00Z` (string, required) - The start time of an aircraft event, in zulu.
     + end_time: `2016-06-01T14:00Z` (string, required) - The end time of an aircraft event, in zulu.
     + start_airfield: `EGTK` (string, required) - ICAO code representing the location of the aircraft at the start of the event.
@@ -564,8 +564,9 @@ You can use this action to delete an event by passing the attribute `"deleted": 
 This is a set of convenient actions to update the schedule with bulk actions (multiple events). The events submitted will be processed by a background job and may not be immediately available.
 
 ### Recreate the schedule [POST]
-Use this action to replace the entire schedule or a part of the schedule defined by a date range.
+Use this action to replace the entire schedule or part of the schedule defined by a date range. **The non matching events that falls in the date range will be deleted.**
 This is typically best suited to situations when the events of the schedule do not have unique ids.
+> Note that the field `data_source_unique_id` is required in that case as well. If you don't have a unique id in your system, we suggest that you provide a *digest* by passing the attributes of the event to *hash function*.
 
 + Request (application/json)
     + Headers
