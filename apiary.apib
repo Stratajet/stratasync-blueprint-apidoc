@@ -102,6 +102,57 @@ This is the RESTful way to update the schedule. Create and update single events 
   
       + Body
 
++ Request (text/xml)
+
+   + Headers
+
+            Authorization: Token token=YOUR_TOKEN
+            Accept: text/xml
+
+    
++ Response 200 (text/xml)
+
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <event>
+            <id type="integer">42</id>
+            <registration_mark>X-XXXX</registration_mark>
+            <start_time type="datetime">2016-06-01T12:00Z</start_time>
+            <end_time type="datetime">2016-06-01T14:00Z</end_time>
+            <start_airfield>EGTK</start_airfield>
+            <end_airfield>LFPB</end_airfield>
+            <utilization>PAX</utilization>
+            <utilization_count type="integer">2</utilization_count>
+            <deleted type="boolean">false</deleted>
+            <data_source_unique_id>550e8400-e29b-41d4-a716-446655440000</data_source_unique_id>
+        </event>
+
+
++ Response 401 (text/xml)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>unauthorized</message>
+            </hash>
+
+
+
++ Response 403 (text/xml)
+    **Forbbiden**. When trying to access this action on the production server.
+    
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>forbidden</message>
+            </hash>
+ 
++ Response 404 (text/xml)
+  **Not found**. When the event identified in the URL is doesn't exist.
+  
+      + Body
 
 
 ### Create an event [POST]
@@ -109,7 +160,7 @@ This is the RESTful way to update the schedule. Create and update single events 
 You may create a single event using this action. It takes a JSON
 object containing the details and eventually your own identifier (must be unique).
     
-+ Request With a valid payload (application/json)
++ Request (application/json)
 
     + Headers
 
@@ -168,33 +219,17 @@ object containing the details and eventually your own identifier (must be unique
                "message": "unauthorized"
             }
 
-
-
-+ Request With an invalid payload (application/json)
-
-    + Headers
-
-            Authorization: Token token=YOUR_TOKEN
-            Accept: application/json
-
++ Response 409 (application/json)
+    **Conflict**. When trying to create an event that already exists (based on the `data_source_unique_id`)
+    
     + Body
 
             {
-                "event": {
-                    "registration_mark": "",
-                    "start_time": "2016-06-01T12:00Z",
-                    "end_time": "2016-06-01",
-                    "start_airfield": "EGTK",
-                    "end_airfield": "1234",
-                    "utilization": "PAX",
-                    "utilization_count": 2,
-                    "deleted": false,
-                    "data_source_unique_id": "550e8400-e29b-41d4-a716-446655440000"
-                }
-            } 
+                "message": "conflict"
+            }
 
 + Response 422 (application/json)
-  **422** Unprocessable entity. Here is a list of possible error strings :
+  **422** Unprocessable entity. When the request was understood by the server but was semantically incorrect. Here is a list of possible error strings :
   - Utilization XXX is an invalid use
   - Aircraft can't be blank
   - Arrival time can't be blank
@@ -216,6 +251,93 @@ object containing the details and eventually your own identifier (must be unique
               ]
             }
 
++ Request (text/xml)
+
+   + Headers
+
+            Authorization: Token token=YOUR_TOKEN
+            Accept: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <event>
+                <registration_mark>X-XXXX</registration_mark>
+                <start_time>2016-06-01T12:00Z</start_time>
+                <end_time>2016-06-01T14:00Z</end_time>
+                <start_airfield>EGTK</start_airfield>
+                <end_airfield>LFPB</end_airfield>
+                <utilization>PAX</utilization>
+                <utilization_count>2</utilization_count>
+                <deleted>false</deleted>
+                <data_source_unique_id>550e8400-e29b-41d4-a716-446655440000</data_source_unique_id>
+            </event>
+
++ Response 201 (text/xml)
+    **Created**. When the event was successfully created
+
+    + Headers
+
+              Location: /events/42
+
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <event>
+                <id type="integer">42</id>
+                <data-source-unique-id>550e8400-e29b-41d4-a716-123</data-source-unique-id>
+                <deleted type="boolean">false</deleted>
+                <end-time type="datetime">2016-06-01T14:00:00Z</end-time>
+                <id type="integer">376041</id>
+                <registration-mark>X-XXXX</registration-mark>
+                <start-airfield>EGTK</start-airfield>
+                <start-time type="datetime">2016-06-01T12:00:00Z</start-time>
+                <utilization>PAX</utilization>
+                <utilization-count type="integer">2</utilization-count>
+            </event>
+
++ Response 401 (text/xml)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>unauthorized</message>
+            </hash>
+
++ Response 409 (text/xml)
+    **Conflict**. When trying to create an event that already exists (based on the `data_source_unique_id`)
+    
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>conflict</message>
+            </hash>
+
+
++ Response 422 (text/xml)
+    **Unprocessable entity**. See the list of possible errors above.
+
+    + Body 
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <errors type="array">
+                    <error>
+                        <details>Aircraft can't be blank</details>
+                    </error>
+                    <error>
+                        <details>Arrival time format must be yyyy-mm-ddThh:mmZ</details>
+                    </error>
+                    <error>
+                        <details>To airfield is not a valid ICAO code</details>
+                    </error>
+                </errors>
+            </hash>
+
 
 ### Update an event [PUT /events/{id}]
 
@@ -225,7 +347,7 @@ You can use this action to delete an event by passing the attribute `"deleted": 
 + Parameters
     + id: `42` (number, required) - Id of an event.
 
-+ Request with a valid payload (application/json)
++ Request (application/json)
 
     + Headers
 
@@ -285,21 +407,6 @@ You can use this action to delete an event by passing the attribute `"deleted": 
       + Body
 
 
-+ Request with an invalid payload (application/json)
-    + Headers
-
-            Authorization: Token token=YOUR_TOKEN
-            Accept: application/json
-
-    + Body
-
-            {
-                "event": {
-                    "start_airfield": "EGCC",
-                    "data_source_unique_id": ""
-                }
-            }
-
 + Response 422 (application/json)
   **Unprocessable entity**. When the payload submitted doesn't allow to update the event. Here is a list of possible error strings :
   - Utilization XXX is an invalid use
@@ -319,9 +426,89 @@ You can use this action to delete an event by passing the attribute `"deleted": 
             {
                 "errors": 
                 [
-                    {details: "Data source unique can't be blank"}
+                    {details: "Departure time can't be blank"},
+                    {details: "Utilization count is not a number"},
                 ]
             }
+
+
++ Request (text/xml)
+
+    + Headers
+
+            Authorization: Token token=YOUR_TOKEN
+            Accept: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <event>
+                <start_time>2016-06-01T13:00Z</start_time>
+                <end_time>2016-06-01T15:00Z</end_time>
+                <start_airfield>EGSH</start_airfield>
+                <utilization_count>3</utilization_count>
+            </event>
+
+
++ Response 200 (text/xml)
+    **OK** When the resource was successfully updated.
+
+    + Headers
+
+            Location: /events/42
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <event>
+                <data-source-unique-id>550e8400-e29b-41d4-a716-446655440000</data-source-unique-id>
+                <deleted type="boolean">true</deleted>
+                <end-time type="datetime">2016-06-01T15:00:00Z</end-time>
+                <id type="integer">367229</id>
+                <registration-mark>CS-DTQ</registration-mark>
+                <start-airfield>EGSH</start-airfield>
+                <start-time type="datetime">2016-06-01T13:00:00Z</start-time>
+                <utilization>MAINTENANCE</utilization>
+                <utilization-count type="integer">3</utilization-count>
+            </event>
+
+
+
++ Response 401 (text/xml)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>unauthorized</message>
+            </hash>
+
+ 
++ Response 404 (text/xml)
+  **Not found**. When the event identified in the URL is doesn't exist.
+  
+      + Body
+
+
+
++ Response 422 (application/json)
+  **Unprocessable entity**. When the payload submitted doesn't allow to update the event. See above for the list of possible errors
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <errors type="array">
+                    <error>
+                        <details>Utilization count is not a number</details>
+                    </error>
+                    <error>
+                        <details>From airfield is not a valid ICAO code</details>
+                    </error>
+                </errors>
+            </hash>
+
 
 ## Schedule - bulk actions [/schedules]
 This is a set of convenient actions to update the schedule with bulk actions (multiple events). The events submitted will be processed by a background job and may not be immediately available.
@@ -352,7 +539,8 @@ This is typically best suited to situations when the events of the schedule do n
                         "end_airfield": "LFPB",
                         "utilization": "PAX",
                         "utilization_count": 3,
-                        "deleted": false
+                        "deleted": false,
+                        "data_source_unique_id": "550e8400-e29b-41d4-a716-4466554412456"
                       },
                       {
                         "registration_mark": "X-XXXX",
@@ -398,6 +586,17 @@ This is typically best suited to situations when the events of the schedule do n
               "message": "Invalid payload. The parameters start_date and end_date are not supported on this action"
             }
 
++ Response 401 (application/json)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            {
+               "message": "unauthorized"
+            }
+
+
+
 + Response 422
     **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
 
@@ -417,6 +616,111 @@ This is typically best suited to situations when the events of the schedule do n
                 ]
             }
 
+
++ Request (text/xml)
+
+    + Headers
+
+            Accept: text/xml
+            Authorization: Token token=YOUR_TOKEN
+
+    + Body
+
+            <schedule>
+                <start_date>2016-01-01T12:00Z</start_date>
+                <end_date>2020-01-01T00:00Z</end_date>
+                <events>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-06-01T13:00Z</start_time>
+                        <end_time>2016-06-01T15:00Z</end_time>
+                        <start_airfield>EGSH</start_airfield>
+                        <end_airfield>LFPB</end_airfield>
+                        <utilization>PAX</utilization>
+                        <utilization_count>3</utilization_count>
+                        <deleted>false</deleted>
+                        <data_source_unique_id>550e8400-e29b-41d4-a716-4466554412333</data_source_unique_id>
+                    </event>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-06-03T09:00Z</start_time>
+                        <end_time>2016-06-03T11:30Z</end_time>
+                        <start_airfield>EBBR</start_airfield>
+                        <end_airfield>EGTK</end_airfield>
+                        <utilization>EMPTY</utilization>
+                        <utilization_count>0</utilization_count>
+                        <deleted>false</deleted>
+                        <data_source_unique_id>660e8400-e29b-41d4-a716-4466554412324</data_source_unique_id>
+                    </event>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-07-04T09:00Z</start_time>
+                        <end_time>2016-07-04T11:30Z</end_time>
+                        <start_airfield>LFPB</start_airfield>
+                        <end_airfield>EBBR</end_airfield>
+                        <utilization>PAX</utilization>
+                        <utilization_count>1</utilization_count>
+                        <deleted>true</deleted>
+                        <data_source_unique_id>770e8400-e29b-41d4-a716-4466554415678</data_source_unique_id>
+                    </event>
+                </events>
+            </schedule>
+
+
++ Response 202 (text/xml)
+    **Accepted**. The request to create the schedule has been accepted for processing
+
+    + Body
+
++ Response 400
+    **Bad request**. Invalid payload. ie. if the date range is not submitted or if the array of events was not provided or was empty
+
+    + Headers
+
+            Content-Type: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>Invalid payload. The parameters start_date and end_date are not present or not at a valid format</message>
+            </hash>
+
++ Response 401 (text/xml)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>unauthorized</message>
+            </hash>
+
+
++ Response 422
+    **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
+
+    + Headers
+
+            Content-Type: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <errors type="array">
+                    <error>
+                        <details>Data source unique can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                </errors>
+            </hash>
+
+
+
++ Response 202
 
 ### Update the schedule [PUT]
 
@@ -491,6 +795,15 @@ Use this action to update multiple events. Events that have been deleted from th
               "message": "Invalid payload. The array of events was not provided or was empty"
             }
 
++ Response 401 (application/json)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            {
+               "message": "unauthorized"
+            }
+
 
 + Response 422
     **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
@@ -506,3 +819,163 @@ Use this action to update multiple events. Events that have been deleted from th
                     }
                 ]
               }
+              
+
++ Request (text/xml)
+
+    + Headers
+
+            Accept: text/xml
+            Authorization: Token token=YOUR_TOKEN
+
+    + Body
+
+            <schedule>
+                <events>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-06-01T13:00Z</start_time>
+                        <end_time>2016-06-01T15:00Z</end_time>
+                        <start_airfield>EGSH</start_airfield>
+                        <end_airfield>LFPB</end_airfield>
+                        <utilization>PAX</utilization>
+                        <utilization_count>3</utilization_count>
+                        <deleted>false</deleted>
+                        <data_source_unique_id>550e8400-e29b-41d4-a716-4466554412333</data_source_unique_id>
+                    </event>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-06-03T09:00Z</start_time>
+                        <end_time>2016-06-03T11:30Z</end_time>
+                        <start_airfield>EBBR</start_airfield>
+                        <end_airfield>EGTK</end_airfield>
+                        <utilization>EMPTY</utilization>
+                        <utilization_count>0</utilization_count>
+                        <deleted>false</deleted>
+                        <data_source_unique_id>660e8400-e29b-41d4-a716-4466554412324</data_source_unique_id>
+                    </event>
+                    <event>
+                        <registration_mark>X-XXXX</registration_mark>
+                        <start_time>2016-07-04T09:00Z</start_time>
+                        <end_time>2016-07-04T11:30Z</end_time>
+                        <start_airfield>LFPB</start_airfield>
+                        <end_airfield>EBBR</end_airfield>
+                        <utilization>PAX</utilization>
+                        <utilization_count>1</utilization_count>
+                        <deleted>true</deleted>
+                        <data_source_unique_id>770e8400-e29b-41d4-a716-4466554415678</data_source_unique_id>
+                    </event>
+                </events>
+            </schedule>
+
+
++ Response 202 (text/xml)
+    **Accepted**. The request to create the schedule has been accepted for processing
+
+    + Body
+
++ Response 400
+    **Bad request**. Invalid payload.
+
+    + Headers
+
+            Content-Type: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>Invalid payload. The array of events was not provided or was empty</message>
+            </hash>
+
++ Response 401 (text/xml)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <message>unauthorized</message>
+            </hash>
+
+
++ Response 422
+    **Unprocessable Entity**. Some of the events submitted were not valid. A list of error will be returned as shown below.
+
+    + Headers
+
+            Content-Type: text/xml
+
+    + Body
+
+            <?xml version="1.0" encoding="UTF-8"?>
+            <hash>
+                <errors type="array">
+                    <error>
+                        <details>Utilization  is an invalid use</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>From airfield can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>From airfield is not a valid ICAO code</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>To airfield can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>To airfield is not a valid ICAO code</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Arrival time can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Arrival time format must be yyyy-mm-ddThh:mmZ</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Departure time can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Departure time format must be yyyy-mm-ddThh:mmZ</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Data source unique can't be blank</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                    <error>
+                        <details>Utilization count is not a number</details>
+                        <meta>
+                            <index type="integer">0</index>
+                        </meta>
+                    </error>
+                </errors>
+            </hash>
