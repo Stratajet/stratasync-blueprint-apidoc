@@ -3,21 +3,71 @@ HOST: http://synctest.stratafleet.com/api
 
 # StrataSync
 
-StrataSync is a simple API allowing operators to upload the schedule of their aircraft to Stratafleet. The `XML` version is yet to be documented.
+StrataSync is a simple API allowing operators to upload the schedule of their aircraft to StrataFleet.
 
 
 **This API requires an API key provided by Stratajet to be consumed.**
 
-You can use the apiary *mock server* to test during development.
-
 ___
-Please contact the integration team if you have any questions or if you need to be set up with an API key :
+Please contact the integration team if you have any questions:
 
-Live chat on Gitter (recommended): https://gitter.im/Stratajet/StrataSync
+<!--Live chat on Gitter: https://gitter.im/Stratajet/StrataSync-->
 
 Email: integrations@stratajet.com
 
 Tel: +44 203 397 4612
+
+
+
+## Technical Introduction
+
+The API accepts and returns both `JSON` and `XML` (content type needs to be specified in the request header).
+
+You can use the [apiary mock server](https://help.apiary.io/tools/mock-server/ "[apiary mock server documentation") to test during development. Code samples for a large set of programming languages are available on every action, just click on an action and choose an option from the dropdown list to get help. (Note that *Production* in the dropdown list actually points to a production-like test server)
+
+## Required HTTP headers
+
+| Header  | Example value | Description
+| ------------- | ------------- | ------------- |
+| Authorization | Token token=72831808-3e6d-4dca-8a38-0f9e068873a0 | API key provided by Stratajet
+| Content-Type  | text/xml  | Format of the request body 
+| Accept  | application/json  | Desired format of the response body
+
+
+## HTTP Codes
+
+Here is the list of possible codes returned by the API and their description
+
+| HTTP Code  | Description
+| ------------- | ------------- | ------------- |
+| 200 | OK |
+| 201  | The resource was successfully created |
+| 202 | Accepted. The request is processed in the background |
+| 400 | Bad request. The server didn't understand the submitted payload |
+| 401 | Unauthorized. The token was not found in the header or was incorrect |
+| 403 | Forbbiden. The server is responding but refuses to take any further action |
+| 404 | Not found. Couldn't find the resource described by the URI |
+| 409 | Conflict. Typically when trying to create an event with an when another already exists with the same `data_source_unique_id` |
+| 422 | Unprocessable Entity. The request was well-formed but was unable to be followed due to semantic errors See the error list below |
+| 5xx | Server Error. Something went wrong. We were notified in case of a 500. Please contact the support if necessary |
+
+
+
+## Event error list (HTTP 422)
+These are the possible errors when receiving an *Unprocessable Entity* error (422)
+
+| Error |
+| ------------- |
+| Utilization XXX is an invalid use |
+| Aircraft can't be blank |
+| Arrival time can't be blank |
+| Arrival time format must be yyyy-mm-ddThh:mmZ |
+| Departure time can't be blank |
+| Departure time format must be yyyy-mm-ddThh:mmZ |
+| Data source unique can't be blank |
+| Utilization count is not a number |
+| From airfield is not a valid ICAO code |
+| To airfield is not a valid ICAO code |
 
 
 
@@ -157,8 +207,7 @@ This is the RESTful way to update the schedule. Create and update single events 
 
 ### Create an event [POST]
 
-You may create a single event using this action. It takes a JSON
-object containing the details and eventually your own identifier (must be unique).
+You may create a single event using this action. It takes a JSON or a XML object containing the details and your own identifier (must be unique).
     
 + Request (application/json)
 
