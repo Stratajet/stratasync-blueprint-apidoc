@@ -21,7 +21,7 @@ Tel: +44 203 397 4612
 
 ## Technical Introduction
 
-The API accepts and returns both `JSON` and `XML` (content type needs to be specified in the request header).
+The API accepts and returns both `JSON` and `XML` (content type needs to be specified in the request header). There are multiple ways of uploading your schedule, you can use [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer 'Rest on wikipedia') actions or *bulk* actions to upload multiple events at a time.
 
 You can use the [apiary mock server](https://help.apiary.io/tools/mock-server/ "[apiary mock server documentation") to test during development. Code samples for a large set of programming languages are available on every action, just click on an action and choose an option from the dropdown list to get help. 
 > Note that *Production* in the dropdown list actually points to a *production-like* server, but not the actual live system. Unfortunately, we are not able to change the label. This testing server is slower than the real production server.
@@ -55,7 +55,7 @@ Here is the list of possible codes returned by the API and their description
 
 
 ## Event error list (HTTP 422)
-These are the possible errors when receiving an *Unprocessable Entity* error (422)
+These are the possible errors when receiving an *Unprocessable Entity* error (422), which could be useful to debug your requests.
 
 | Error |
 | ------------- |
