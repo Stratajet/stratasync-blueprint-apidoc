@@ -48,11 +48,12 @@ This is the RESTful way to update the schedule. Create and update single events 
 
 
 ### Show an event [GET /events/{id}]
+*Note: This action is not currently available in production for security/privacy concerns.*
 
 + Parameters
     + id: `42` (number, required) - Id of an event.
     
-+ Request With a valid payload (application/json)
++ Request (application/json)
 
     + Headers
 
@@ -76,6 +77,26 @@ This is the RESTful way to update the schedule. Create and update single events 
                 }
             } 
 
++ Response 401 (application/json)
+    **Unauthorized**. When the token is missing or incorrect.
+
+    + Body
+
+            {
+               "message": "unauthorized"
+            }
+
+
++ Response 403
+    **Forbbiden**. When trying to access this action on the production server.
+    
+    + Body
+
+            {
+               "message": "forbbiden"
+            }
+
+ 
 + Response 404 (application/json)
   **Not found**. When the event identified in the URL is doesn't exist.
   
