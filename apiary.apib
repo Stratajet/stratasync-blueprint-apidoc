@@ -75,8 +75,8 @@ These are the possible errors when receiving an *Unprocessable Entity* error (42
 This is the RESTful way to update the schedule. Create and update single events using the following actions.
 
 + Attributes
-    + id: `550e8400-e29b-41d4-a716-446655440000` (number) - The internal id of the event 
-    + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, required) - The identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. **Must be unique**.
+    + id: `550e8400-e29b-41d4-a716-446655440000` (number) - The Stratajet internal id of the event, returned upon creation of a single event. To be used in further *RESTful* requests.
+    + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, required) - The unique identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. **Must be a unique id in your scheduling software**.
     + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event. If it doesn't exist upon creation of the event, a new aircraft will be created with the registration mark provided.
     + start_time: `2016-06-01T12:00Z` (string, required) - The start time of an aircraft event, in zulu.
     + end_time: `2016-06-01T14:00Z` (string, required) - The end time of an aircraft event, in zulu.
@@ -92,7 +92,7 @@ This is the RESTful way to update the schedule. Create and update single events 
         + `PAX` - Aircraft is flying with PAX
         + `PRIVATE` - Aircraft is being used by the owner
         + `TRAINING` - Aircraft is being used for training
-        + `UNCLASSIFIED` - Aircraft is being used for a purpose
+        + `UNCLASSIFIED` - Aircraft is being used for an unspecified purpose
     + utilization_count (number, required) - If the utilization is cargo, the value is the weight of cargo in kg. Otherwise, the value indicate the number of passengers
     + deleted (boolean, required) - Indicates whether an aircraft event has been deleted. Ie. it has been previously submitted to the webservice, but has since been removed.
 
