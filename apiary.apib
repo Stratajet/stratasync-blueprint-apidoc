@@ -13,7 +13,7 @@ Please contact the integration team if you have any questions:
 
 <!--Live chat on Gitter: https://gitter.im/Stratajet/StrataSync-->
 
-- Using our [Slack live chat support](stratajet.slack.com 'Stratajet on slack') ( **recommended**, you should have received an invitation, if not please notify us!)
+- Using our [Slack live chat support](http://stratajet.slack.com 'Stratajet on slack') ( **recommended**, you should have received an invitation, if not please notify us!)
 - Email: integrations@stratajet.com
 - Tel: +44 203 397 4612
 
@@ -26,7 +26,7 @@ The API accepts and returns both `JSON` and `XML` (content type needs to be spec
 You can use the [apiary mock server](https://help.apiary.io/tools/mock-server/ "[apiary mock server documentation") to test during development. Code samples for a large set of programming languages are available on every action, just click on an action and choose an option from the dropdown list to get help. 
 > Note that *Production* in the dropdown list actually points to a *production-like* server, but not the actual live system. Unfortunately, we are not able to change the label. This testing server is slower than the real production server.
 
-## Required HTTP headers
+## Required HTTP headerse
 
 | Header  | Example value | Description
 | ------------- | ------------- | ------------- |
@@ -208,7 +208,7 @@ This is the RESTful way to update the schedule. Create and update single events 
 
 ### Create an event [POST]
 
-You may create a single event using this action. It takes a JSON or a XML object containing the details and your own identifier (must be unique).
+You may create a single event using this action. It takes a `JSON` or a `XML` object containing the details and your own identifier (must be unique).
     
 + Request (application/json)
 
@@ -391,7 +391,7 @@ You may create a single event using this action. It takes a JSON or a XML object
 
 ### Update an event [PUT /events/{id}]
 
-You may partially update a single event using this action. It takes a JSON object containing the attributes to update and returns the updated resource as in a single `GET` request. 
+You may partially update a single event using this action. It takes a `JSON` or `XML` object containing the attributes to update and returns the updated resource as in a single `GET` request. 
 You can use this action to delete an event by passing the attribute `"deleted": true`.
 
 + Parameters
