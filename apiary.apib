@@ -394,6 +394,8 @@ You may create a single event using this action. It takes a `JSON` or a `XML` ob
 You may partially update a single event using this action. It takes a `JSON` or `XML` object containing the attributes to update and returns the updated resource as in a single `GET` request. 
 You can use this action to delete an event by passing the attribute `"deleted": true`.
 
+> __To update an event using the external id `data_source_unique_id`, you can use then endpoint `PUT /events/ext/:uid`, which behave in the exact same way__
+
 + Parameters
     + id: `42` (number, required) - Id of an event.
 
