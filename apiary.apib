@@ -76,7 +76,7 @@ These are the possible errors when receiving an *Unprocessable Entity* error (42
 This is the RESTful way to update the schedule. Create and update single events using the following actions.
 
 + Attributes
-    + id: `550e8400-e29b-41d4-a716-446655440000` (number) - The Stratajet internal id of the event, returned upon creation of a single event. To be used in further *RESTful* requests.
+    + id: `1234` (number) - The Stratajet internal id of the event, returned upon creation of a single event. To be used in further *RESTful* requests.
     + data_source_unique_id: `550e8400-e29b-41d4-a716-446655440000` (string, required) - The unique identifier used by the integration provider to identify the event. We recommend using UUID but any other unique identifier can be used instead. **Must be a unique id in your scheduling software**.
     + registration_mark: `G-ABCD` (string, required) - The registration mark of the aircraft involved in the event. **If it doesn't exist upon creation of the event, a new aircraft will be created with the registration mark provided.**
     + start_time: `2016-06-01T12:00Z` (string, required) - The start time of an aircraft event, in zulu.
